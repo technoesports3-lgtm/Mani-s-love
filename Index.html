@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>💖 Mani's Heart 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(ellipse at center bottom, #1a0508 0%, #2d0a12 30%, #1f0a0e 60%, #0d0406 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* ===== HEART DECORATIONS ===== */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .heart-float {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.15;
+            animation: floatHeart 8s ease-in-out infinite alternate;
+            color: #ff6b8a;
+        }
+        @keyframes floatHeart {
+            0%   { transform: translateY(0) rotate(0deg) scale(1); }
+            100% { transform: translateY(-80px) rotate(15deg) scale(1.1); }
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        #app {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 500px;
+            max-height: 900px;
+            margin: 0 auto;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ============================================================
+           ENTRY SCREEN + KEYPAD
+           ============================================================ */
+        #entryScreen {
+            position: relative;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            padding: 30px 26px 24px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 107, 138, 0.25);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            width: 100%;
+            max-width: 380px;
+            max-height: 94vh;
+            overflow-y: auto;
+            scrollbar-width: none;
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        #entryScreen::-webkit-scrollbar { display: none; }
+
+        #entryScreen.fade-out {
+            opacity: 0;
+            transform: scale(0.9) translateY(30px);
+            pointer-events: none;
+        }
+
+        #entryScreen .heart-badge {
+            font-size: 34px;
+            line-height: 1;
+            color: #ff3366;
+            filter: drop-shadow(0 0 18px rgba(255, 51, 102, 0.9));
+            animation: heartBeat 1.8s ease-in-out infinite;
+        }
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            15%      { transform: scale(1.18); }
+            30%      { transform: scale(1); }
+            45%      { transform: scale(1.12); }
+            60%      { transform: scale(1); }
+        }
+
+        #entryScreen .title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 40px;
+            line-height: 1.1;
+            text-align: center;
+            background: linear-gradient(180deg, #fff5f8 0%, #ffb3c6 45%, #ff3366 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            filter: drop-shadow(0 0 22px rgba(255, 51, 102, 0.75)) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.5));
+            padding-bottom: 4px;
+        }
+
+        #entryScreen .subtitle {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.45);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 400;
+            text-align: center;
+            margin-top: -6px;
+        }
+
+        /* --- DOTS --- */
+        #entryScreen .dots {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 6px 0 2px;
+        }
+        #entryScreen .dot {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 107, 138, 0.35);
+            transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #entryScreen .dot.filled {
+            background: linear-gradient(135deg, #ff3366, #ff8fa3);
+            border-color: #ffb3c6;
+            box-shadow: 0 0 14px rgba(255, 51, 102, 0.95), 0 0 26px rgba(255, 51, 102, 0.5);
+            transform: scale(1.18);
+        }
+        #entryScreen .dots.shake {
+            animation: dotsShake 0.5s ease;
+        }
+        @keyframes dotsShake {
+            0%, 100% { transform: translateX(0); }
+            20%      { transform: translateX(-12px); }
+            40%      { transform: translateX(12px); }
+            60%      { transform: translateX(-8px); }
+            80%      { transform: translateX(8px); }
+        }
+
+        /* --- KEYPAD --- */
+        #entryScreen .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            margin-top: 4px;
+        }
+        #entryScreen .key {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.03));
+            border: 1px solid rgba(255, 107, 138, 0.22);
+            border-radius: 16px;
+            padding: 14px 0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: #ffe9ef;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.12s ease, background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+        }
+        #entryScreen .key:hover {
+            border-color: rgba(255, 107, 138, 0.6);
+            background: linear-gradient(180deg, rgba(255, 107, 138, 0.22), rgba(255, 107, 138, 0.07));
+            box-shadow: 0 6px 24px rgba(255, 51, 102, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+        #entryScreen .key:active {
+            transform: scale(0.92);
+            background: linear-gradient(180deg, rgba(255, 51, 102, 0.55), rgba(255, 51, 102, 0.25));
+            box-shadow: 0 0 28px rgba(255, 51, 102, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        }
+        #entryScreen .key-fn {
+            font-size: 18px;
+            color: #ff8fa3;
+        }
+
+        /* --- ERROR --- */
+        #entryScreen .error-msg {
+            color: #ff6b8a;
+            font-size: 12.5px;
+            min-height: 18px;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            font-weight: 400;
+            letter-spacing: 0.4px;
+            text-align: center;
+            line-height: 1.4;
+        }
+        #entryScreen .error-msg.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== SCENE (Balloon + Bow + Arrow) ===== */
+        #sceneContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        #sceneContainer.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* ===== BALLOON ===== */
+        #balloonWrapper {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            z-index: 6;
+        }
+        #balloonWrapper.show { opacity: 1; }
+        #balloonWrapper.pop {
+            transform: translateX(-50%) scale(0.1);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease;
+        }
+
+        .balloon {
+            position: relative;
+            width: 120px;
+            height: 150px;
+            margin: 0 auto;
+        }
+        .balloon-body {
+            width: 100%;
+            height: 100%;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            background: radial-gradient(ellipse at 30% 20%, #ff8fa3, #ff3366 60%, #cc1144 100%);
+            box-shadow: inset -15px -15px 40px rgba(0, 0, 0, 0.2), inset 10px 10px 40px rgba(255, 255, 255, 0.25), 0 20px 60px rgba(255, 51, 102, 0.3);
+            position: relative;
+        }
+        .balloon-body::before {
+            content: '';
+            position: absolute;
+            top: 12%;
+            left: 22%;
+            width: 30%;
+            height: 18%;
+            background: radial-gradient(ellipse, rgba(255, 255, 255, 0.45) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: rotate(-20deg);
+        }
+        .balloon-body::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 14px;
+            background: #cc1144;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+        .balloon-string {
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+            margin: 0 auto;
+            position: relative;
+            animation: stringSway 2s ease-in-out infinite alternate;
+            transform-origin: top center;
+        }
+        @keyframes stringSway {
+            0%   { transform: rotate(-3deg); }
+            100% { transform: rotate(3deg); }
+        }
+        .balloon-glow {
+            position: absolute;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: radial-gradient(ellipse at center, rgba(255, 107, 138, 0.15), transparent 70%);
+            border-radius: 50%;
+            animation: glowPulse 2s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes glowPulse {
+            0%   { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* ===== BOW & ARROW ===== */
+        #bowContainer {
+            position: absolute;
+            bottom: 22%;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease 0.3s;
+            z-index: 7;
+        }
+        #bowContainer.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .bow-svg-wrapper {
+            position: relative;
+            width: 280px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .bow-svg-wrapper svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 40px rgba(255, 107, 138, 0.15));
+            overflow: visible;
+        }
+
+        #arrowGroup {
+            cursor: grab;
+            pointer-events: auto;
+            transition: opacity 0.15s ease;
+        }
+        #arrowGroup:active { cursor: grabbing; }
+        #arrowGroup.dragging { cursor: grabbing; }
+
+        .bow-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(255, 107, 138, 0.06), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* ===== FLYING ARROW ===== */
+        #flyingArrow {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 36px;
+            height: 112px;
+            margin-left: -18px;
+            margin-top: -56px;
+            transform-origin: center center;
+            pointer-events: none;
+            z-index: 35;
+            display: none;
+            opacity: 1;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.95))
+                    drop-shadow(0 0 26px rgba(255, 51, 102, 0.75));
+        }
+        #flyingArrow svg { width: 100%; height: 100%; display: block; }
+
+        .trail-sparkle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 29;
+            animation: trailFade 0.7s ease-out forwards;
+        }
+        @keyframes trailFade {
+            0%   { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.15); }
+        }
+
+        /* ===== CONFETTI CANVAS ===== */
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        #confettiCanvas.active { opacity: 1; }
+
+        /* ============================================================
+           HAPPY BIRTHDAY TEXT — BIG & BEAUTIFUL
+           ============================================================ */
+        #happyText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.2);
+            z-index: 40;
+            opacity: 0;
+            pointer-events: none;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0px;
+            padding: 20px 20px;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Glow behind the text */
+        #happyText::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 160%;
+            height: 160%;
+            background: radial-gradient(ellipse at center,
+                rgba(255, 51, 102, 0.25) 0%,
+                rgba(255, 51, 102, 0.12) 35%,
+                transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            animation: glowPulseBg 3s ease-in-out infinite alternate;
+        }
+        @keyframes glowPulseBg {
+            0%   { opacity: 0.6; transform: translate(-50%, -50%) scale(0.9); }
+            100% { opacity: 1;   transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        #happyText.show {
+            animation: happyReveal 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes happyReveal {
+            0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(-5deg); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+        }
+
+        /* Line 1 — "Happy Birthday" */
+        #happyText .line1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(34px, 10vw, 58px);
+            font-weight: 700;
+            letter-spacing: 1px;
+            line-height: 1.1;
+            white-space: nowrap;
+            background: linear-gradient(180deg, #ffffff 0%, #ffd9e2 40%, #ff9db4 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            filter: drop-shadow(0 0 20px rgba(255, 107, 138, 0.9))
+                    drop-shadow(0 0 40px rgba(255, 51, 102, 0.6))
+                    drop-shadow(0 6px 20px rgba(0, 0, 0, 0.6));
+            opacity: 0;
+        }
+        #happyText.show .line1 {
+            animation: linePop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s forwards;
+        }
+        @keyframes linePop {
+            0%   { opacity: 0; transform: scale(0.5) translateY(22px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Mini heart divider */
+        #happyText .mini-heart {
+            font-size: clamp(18px, 5vw, 30px);
+            color: #ff3366;
+            line-height: 1;
+            margin: -2px 0 0px;
+            filter: drop-shadow(0 0 20px rgba(255, 51, 102, 1))
+                    drop-shadow(0 0 40px rgba(255, 107, 138, 0.8));
+            opacity: 0;
+        }
+        #happyText.show .mini-heart {
+            animation: linePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.32s forwards,
+                       heartBeat 1.4s ease-in-out 1.1s infinite;
+        }
+
+        /* Line 2 — "My Love" (SIZE REDUCED & BALANCED) */
+        #happyText .line2 {
+            font-family: 'Great Vibes', cursive;
+            /* ఇక్కడ మార్పు చేసాను bro, ఇప్పుడు ఇది screen ki perfect ga fit avuthundhi */
+            font-size: clamp(42px, 15vw, 85px);
+            line-height: 1.1;
+            white-space: nowrap;
+            padding: 0 0.1em 0.1em;
+            background: linear-gradient(180deg, #fff5f8 0%, #ffb3c6 30%, #ff3366 70%, #d90b3f 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            filter: drop-shadow(0 0 30px rgba(255, 51, 102, 1))
+                    drop-shadow(0 0 70px rgba(255, 51, 102, 0.7))
+                    drop-shadow(0 0 120px rgba(255, 107, 138, 0.5))
+                    drop-shadow(0 10px 25px rgba(0, 0, 0, 0.6));
+            opacity: 0;
+        }
+        #happyText.show .line2 {
+            animation: linePopBig 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.42s forwards,
+                       glowPulseText 2.4s ease-in-out 1.6s infinite alternate;
+        }
+        @keyframes linePopBig {
+            0%   { opacity: 0; transform: scale(0.3) translateY(30px) rotate(-5deg); }
+            70%  { opacity: 1; transform: scale(1.05) translateY(-5px) rotate(2deg); }
+            100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+        }
+        @keyframes glowPulseText {
+            from {
+                filter: drop-shadow(0 0 30px rgba(255, 51, 102, 1))
+                        drop-shadow(0 0 70px rgba(255, 51, 102, 0.7))
+                        drop-shadow(0 0 120px rgba(255, 107, 138, 0.5))
+                        drop-shadow(0 10px 25px rgba(0, 0, 0, 0.6));
+            }
+            to {
+                filter: drop-shadow(0 0 40px rgba(255, 51, 102, 1))
+                        drop-shadow(0 0 90px rgba(255, 107, 138, 0.9))
+                        drop-shadow(0 0 150px rgba(255, 107, 138, 0.6))
+                        drop-shadow(0 10px 25px rgba(0, 0, 0, 0.6));
+            }
+        }
+
+        /* ===== POP SPARKLES ===== */
+        .sparkle-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 45;
+            border-radius: 50%;
+            animation: sparkleFly 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes sparkleFly {
+            0%   { opacity: 1; transform: translate(0, 0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0) rotate(720deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            #entryScreen {
+                padding: 24px 18px 20px;
+                max-width: 330px;
+                gap: 11px;
+                border-radius: 26px;
+            }
+            #entryScreen .title { font-size: 34px; }
+            #entryScreen .key { font-size: 20px; padding: 12px 0; border-radius: 14px; }
+            #entryScreen .keypad { gap: 9px; }
+            #entryScreen .dot { width: 11px; height: 11px; }
+            #entryScreen .dots { gap: 9px; }
+            .balloon { width: 90px; height: 112px; }
+            .balloon-string { height: 60px; }
+            .bow-svg-wrapper { width: 200px; height: 150px; }
+            #balloonWrapper { top: 6%; }
+            #bowContainer { bottom: 16%; }
+        }
+        @media (max-width: 380px) {
+            #entryScreen { padding: 20px 14px 18px; max-width: 290px; gap: 9px; }
+            #entryScreen .title { font-size: 29px; }
+            #entryScreen .heart-badge { font-size: 27px; }
+            #entryScreen .key { font-size: 18px; padding: 10px 0; border-radius: 13px; }
+            #entryScreen .keypad { gap: 7px; }
+            #entryScreen .dot { width: 10px; height: 10px; border-width: 1px; }
+            #entryScreen .dots { gap: 7px; }
+            .balloon { width: 72px; height: 90px; }
+            .bow-svg-wrapper { width: 160px; height: 120px; }
+        }
+        @media (max-height: 720px) {
+            #entryScreen { padding: 18px 18px 16px; gap: 9px; }
+            #entryScreen .heart-badge { font-size: 26px; }
+            #entryScreen .title { font-size: 31px; }
+            #entryScreen .key { padding: 10px 0; font-size: 19px; }
+            #entryScreen .keypad { gap: 8px; }
+            #entryScreen .dots { margin: 2px 0 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== BACKGROUND HEARTS ===== -->
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <!-- ===== CONFETTI CANVAS ===== -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- ===== FLYING ARROW (appears during flight) ===== -->
+    <div id="flyingArrow">
+        <svg viewBox="0 0 36 112" xmlns="http://www.w3.org/2000/svg">
+            <line x1="18" y1="20" x2="18" y2="94" stroke="#ffd700" stroke-width="3.2" stroke-linecap="round"/>
+            <polygon points="18,2 8,24 28,24" fill="#ffd700" stroke="#ffb800" stroke-width="1.2" stroke-linejoin="round"/>
+            <polygon points="18,94 5,80 10,102" fill="#ff6b8a"/>
+            <polygon points="18,94 31,80 26,102" fill="#ff6b8a"/>
+        </svg>
+    </div>
+
+    <!-- ===== HAPPY BIRTHDAY TEXT ===== -->
+    <div id="happyText">
+        <span class="line1">Happy Birthday</span>
+        <span class="mini-heart">❤</span>
+        <span class="line2">My Love</span>
+    </div>
+
+    <!-- ===== MAIN APP ===== -->
+    <div id="app">
+
+        <!-- ===== ENTRY SCREEN ===== -->
+        <div id="entryScreen">
+            <div class="heart-badge">❤</div>
+            <div class="title">One and Only Heart</div>
+            <div class="subtitle">Enter any 8 digits</div>
+
+            <div class="dots" id="dots"></div>
+
+            <div class="keypad" id="keypad">
+                <button class="key" data-val="1">1</button>
+                <button class="key" data-val="2">2</button>
+                <button class="key" data-val="3">3</button>
+                <button class="key" data-val="4">4</button>
+                <button class="key" data-val="5">5</button>
+                <button class="key" data-val="6">6</button>
+                <button class="key" data-val="7">7</button>
+                <button class="key" data-val="8">8</button>
+                <button class="key" data-val="9">9</button>
+                <button class="key key-fn" data-val="clear">C</button>
+                <button class="key" data-val="0">0</button>
+                <button class="key key-fn" data-val="back">⌫</button>
+            </div>
+
+            <div class="error-msg" id="errorMsg"></div>
+        </div>
+
+        <!-- ===== SCENE ===== -->
+        <div id="sceneContainer">
+
+            <!-- BALLOON -->
+            <div id="balloonWrapper">
+                <div class="balloon">
+                    <div class="balloon-glow"></div>
+                    <div class="balloon-body"></div>
+                </div>
+                <div class="balloon-string"></div>
+            </div>
+
+            <!-- BOW & ARROW -->
+            <div id="bowContainer">
+                <div class="bow-glow"></div>
+                <div class="bow-svg-wrapper">
+                    <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                        id="bowPath"
+                        d="M 40 20 Q 30 100 40 180 Q 140 160 240 180 Q 250 100 240 20 Q 140 40 40 20 Z"
+                        fill="none"
+                        stroke="url(#bowGradient)"
+                        stroke-width="6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        />
+                        <line
+                        id="bowstring"
+                        x1="40" y1="20" x2="240" y2="20"
+                        stroke="rgba(255,255,255,0.5)"
+                        stroke-width="2"
+                        />
+                        <g id="arrowGroup">
+                            <line id="arrowShaft" x1="140" y1="100" x2="140" y2="30"
+                                  stroke="#ffd700" stroke-width="3" stroke-linecap="round" />
+                            <polygon id="arrowTip" points="140,12 132,28 148,28"
+                                     fill="#ffd700" stroke="#ffb800" stroke-width="1" />
+                            <polygon id="arrowFeathers" points="140,100 130,92 130,108"
+                                     fill="#ff6b8a" opacity="0.9" />
+                            <polygon points="140,100 150,92 150,108"
+                                     fill="#ff6b8a" opacity="0.9" />
+                        </g>
+                        <circle cx="140" cy="100" r="6" fill="rgba(255,107,138,0.3)" stroke="rgba(255,107,138,0.5)" stroke-width="1"/>
+                        <circle cx="140" cy="100" r="3" fill="#ff6b8a" opacity="0.6"/>
+
+                        <defs>
+                            <linearGradient id="bowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#ff6b8a" />
+                                <stop offset="50%" stop-color="#ffd700" />
+                                <stop offset="100%" stop-color="#ff6b8a" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================================
+        //  CONFIG — ANY 8 DIGITS UNLOCK
+        // ============================================================
+        const ACCEPT_ANY_CODE = true;   // ← any 8 digits will unlock
+
+        // ============================================================
+        //  DOM REFS
+        // ============================================================
+        const entryScreen   = document.getElementById('entryScreen');
+        const dotsEl        = document.getElementById('dots');
+        const keypad        = document.getElementById('keypad');
+        const errorMsg      = document.getElementById('errorMsg');
+        const sceneContainer= document.getElementById('sceneContainer');
+        const balloonWrapper= document.getElementById('balloonWrapper');
+        const bowContainer  = document.getElementById('bowContainer');
+        const happyText     = document.getElementById('happyText');
+        const confettiCanvas= document.getElementById('confettiCanvas');
+        const ctx           = confettiCanvas.getContext('2d');
+        const flyingArrow   = document.getElementById('flyingArrow');
+
+        const arrowGroup    = document.getElementById('arrowGroup');
+        const arrowShaft    = document.getElementById('arrowShaft');
+        const arrowTip      = document.getElementById('arrowTip');
+        const bowstring     = document.getElementById('bowstring');
+        const bowPath       = document.getElementById('bowPath');
+
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let isUnlocked      = false;
+        let isArrowFlying   = false;
+        let isPopped        = false;
+        let enteredCode     = '';
+
+        const arrowBaseY    = 30;
+        const arrowMaxPull  = 70;
+
+        // Confetti
+        let confettiParticles = [];
+        let confettiRunning   = false;
+        let confettiRAF       = null;
+
+        // ============================================================
+        //  BACKGROUND HEARTS
+        // ============================================================
+        (function createHearts() {
+            const container = document.getElementById('heartsBg');
+            const hearts = ['♥', '♡', '❤', '💕', '💗', '💖'];
+            for (let i = 0; i < 30; i++) {
+                const el = document.createElement('span');
+                el.className = 'heart-float';
+                el.textContent = hearts[i % hearts.length];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.top = Math.random() * 100 + '%';
+                el.style.fontSize = (14 + Math.random() * 28) + 'px';
+                el.style.animationDuration = (6 + Math.random() * 6) + 's';
+                el.style.animationDelay = (Math.random() * 6) + 's';
+                el.style.opacity = 0.06 + Math.random() * 0.12;
+                container.appendChild(el);
+            }
+        })();
+
+        // ============================================================
+        //  CANVAS RESIZE
+        // ============================================================
+        function resizeCanvas() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // ============================================================
+        //  CONFETTI SYSTEM
+        // ============================================================
+        class ConfettiParticle {
+            constructor(x, y) {
+                this.x = x || window.innerWidth / 2;
+                this.y = y || window.innerHeight / 2;
+                this.size = 6 + Math.random() * 10;
+                this.speedX = (Math.random() - 0.5) * 20;
+                this.speedY = -8 - Math.random() * 14;
+                this.gravity = 0.25 + Math.random() * 0.15;
+                this.rotation = Math.random() * 360;
+                this.rotSpeed = (Math.random() - 0.5) * 20;
+                this.color = [
+                    '#ff3366', '#ff6b8a', '#ffd700', '#ff8fa3',
+                    '#ff4d6d', '#ffb3c6', '#ff99aa', '#ffccd5',
+                    '#ff2d55', '#ff6b6b', '#ffa07a', '#ffb347'
+                ][Math.floor(Math.random() * 12)];
+                this.life = 1;
+                this.decay = 0.006 + Math.random() * 0.008;
+                this.shape = Math.random() > 0.5 ? 'circle' : 'rect';
+                this.wobble = Math.random() * 0.5;
+                this.wobbleSpeed = 0.02 + Math.random() * 0.03;
+                this.phase = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += this.gravity;
+                this.speedX *= 0.99;
+                this.rotation += this.rotSpeed;
+                this.life -= this.decay;
+                this.phase += this.wobbleSpeed;
+                this.x += Math.sin(this.phase) * this.wobble;
+                return this.life > 0;
+            }
+
+            draw(c) {
+                c.save();
+                c.translate(this.x, this.y);
+                c.rotate((this.rotation * Math.PI) / 180);
+                c.globalAlpha = this.life * 0.9;
+                c.fillStyle = this.color;
+
+                const s = this.size * this.life;
+                if (this.shape === 'circle') {
+                    c.beginPath();
+                    c.arc(0, 0, s / 2, 0, Math.PI * 2);
+                    c.fill();
+                } else {
+                    c.fillRect(-s / 2, -s / 4, s, s / 2);
+                }
+
+                c.shadowColor = this.color;
+                c.shadowBlur = 15;
+                c.fill();
+                c.restore();
+            }
+        }
+
+        function burstConfetti(count, x, y) {
+            if (!x || !y) {
+                x = window.innerWidth / 2;
+                y = window.innerHeight / 2;
+            }
+            for (let i = 0; i < count; i++) {
+                const p = new ConfettiParticle(x, y);
+                p.speedX = (Math.random() - 0.5) * 24;
+                p.speedY = -6 - Math.random() * 18;
+                p.gravity = 0.2 + Math.random() * 0.2;
+                confettiParticles.push(p);
+            }
+            if (!confettiRunning) {
+                confettiRunning = true;
+                animateConfetti();
+            }
+        }
+
+        function animateConfetti() {
+            if (confettiParticles.length === 0) {
+                confettiRunning = false;
+                confettiCanvas.classList.remove('active');
+                if (confettiRAF) {
+                    cancelAnimationFrame(confettiRAF);
+                    confettiRAF = null;
+                }
+                ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                return;
+            }
+
+            confettiCanvas.classList.add('active');
+            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+            for (let i = confettiParticles.length - 1; i >= 0; i--) {
+                const p = confettiParticles[i];
+                if (p.update()) {
+                    p.draw(ctx);
+                } else {
+                    confettiParticles.splice(i, 1);
+                }
+            }
+
+            confettiRAF = requestAnimationFrame(animateConfetti);
+        }
+
+        // ============================================================
+        //  SPARKLE PARTICLES (balloon pop)
+        // ============================================================
+        function createSparkles(x, y) {
+            const colors = ['#ffd700', '#ff6b8a', '#ff8fa3', '#fff', '#ffccd5', '#ff99aa', '#ff3366'];
+            for (let i = 0; i < 60; i++) {
+                const el = document.createElement('div');
+                el.className = 'sparkle-particle';
+                const size = 4 + Math.random() * 12;
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 80 + Math.random() * 250;
+                const tx = Math.cos(angle) * dist;
+                const ty = Math.sin(angle) * dist - 100;
+                const col = colors[Math.floor(Math.random() * colors.length)];
+                el.style.width = size + 'px';
+                el.style.height = size + 'px';
+                el.style.left = (x - size / 2) + 'px';
+                el.style.top = (y - size / 2) + 'px';
+                el.style.background = col;
+                el.style.boxShadow = `0 0 20px ${col}`;
+                el.style.setProperty('--tx', tx + 'px');
+                el.style.setProperty('--ty', ty + 'px');
+                el.style.animationDuration = (0.8 + Math.random() * 0.8) + 's';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 2000);
+            }
+        }
+
+        // ============================================================
+        //  ARROW TRAIL SPARKLES
+        // ============================================================
+        function createTrailSparkle(x, y) {
+            const el = document.createElement('div');
+            el.className = 'trail-sparkle';
+            const size = 3 + Math.random() * 7;
+            const col = Math.random() > 0.5 ? '#ffd700' : '#ff6b8a';
+            el.style.width = size + 'px';
+            el.style.height = size + 'px';
+            el.style.left = (x - size / 2 + (Math.random() - 0.5) * 18) + 'px';
+            el.style.top = (y - size / 2 + (Math.random() - 0.5) * 18) + 'px';
+            el.style.background = col;
+            el.style.boxShadow = '0 0 14px ' + col;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 750);
+        }
+
+        // ============================================================
+        //  BALLOON POP
+        // ============================================================
+        function popBalloon() {
+            if (isPopped) return;
+            isPopped = true;
+
+            const rect = balloonWrapper.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+
+            balloonWrapper.classList.add('pop');
+            createSparkles(cx, cy);
+            burstConfetti(120, cx, cy);
+
+            setTimeout(() => {
+                burstConfetti(60, cx - 60, cy + 40);
+                burstConfetti(60, cx + 60, cy + 40);
+            }, 200);
+
+            setTimeout(() => {
+                happyText.classList.add('show');
+            }, 400);
+
+            setTimeout(() => {
+                bowContainer.style.opacity = '0';
+                bowContainer.style.pointerEvents = 'none';
+            }, 800);
+        }
+
+        // ============================================================
+        //  ARROW FLY
+        // ============================================================
+        function flyArrowToBalloon() {
+            if (isArrowFlying) return;
+            isArrowFlying = true;
+            arrowGroup.style.pointerEvents = 'none';
+
+            const balloonRect = balloonWrapper.getBoundingClientRect();
+            const bowRect     = bowContainer.getBoundingClientRect();
+
+            const startX = bowRect.left + bowRect.width / 2;
+            const startY = bowRect.top + bowRect.height / 2 - 34;
+
+            const endX = balloonRect.left + balloonRect.width / 2;
+            const endY = balloonRect.top + balloonRect.height / 2;
+
+            const dx = endX - startX;
+            const dy = endY - startY;
+            const angle = Math.atan2(dx, -dy) * (180 / Math.PI);
+
+            arrowGroup.style.opacity = '0';
+            bowstring.style.opacity = '0';
+
+            flyingArrow.style.display = 'block';
+            flyingArrow.style.transition = 'none';
+            flyingArrow.style.transform =
+                `translate(${startX}px, ${startY}px) rotate(${angle}deg) scale(0.85)`;
+
+            void flyingArrow.offsetWidth;
+
+            const dist = Math.hypot(dx, dy);
+            const duration = 380 + dist * 0.36;
+            const startTime = performance.now();
+
+            function step(now) {
+                const t = Math.min((now - startTime) / duration, 1);
+                const e = 1 - Math.pow(1 - t, 2.2);
+
+                const x = startX + dx * e;
+                const y = startY + dy * e - Math.sin(t * Math.PI) * 34;
+
+                flyingArrow.style.transform =
+                    `translate(${x}px, ${y}px) rotate(${angle}deg) scale(${0.85 + 0.35 * e})`;
+
+                if (Math.random() > 0.45) createTrailSparkle(x, y + 30);
+
+                if (t < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    popBalloon();
+                    flyingArrow.style.transition = 'opacity 0.25s ease';
+                    flyingArrow.style.opacity = '0';
+                    setTimeout(() => {
+                        flyingArrow.style.display = 'none';
+                        flyingArrow.style.opacity = '1';
+                        flyingArrow.style.transition = 'none';
+                    }, 300);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // ============================================================
+        //  BOW PULL INTERACTION
+        // ============================================================
+        function updateBowPull(pullAmount) {
+            const clamped = Math.min(Math.max(pullAmount, 0), 1);
+
+            const arrowY = arrowBaseY + clamped * arrowMaxPull;
+            arrowGroup.setAttribute('transform', `translate(0, ${arrowY - arrowBaseY})`);
+
+            const bowPoints = [
+                [40, 20],
+                [30, 100],
+                [40, 180],
+                [140, 160 + clamped * 30],
+                [240, 180],
+                [250, 100],
+                [240, 20],
+                [140, 40 - clamped * 20]
+            ];
+            let d = `M ${bowPoints[0][0]} ${bowPoints[0][1]}`;
+            d += ` Q ${bowPoints[1][0]} ${bowPoints[1][1]} ${bowPoints[2][0]} ${bowPoints[2][1]}`;
+            d += ` Q ${bowPoints[3][0]} ${bowPoints[3][1]} ${bowPoints[4][0]} ${bowPoints[4][1]}`;
+            d += ` Q ${bowPoints[5][0]} ${bowPoints[5][1]} ${bowPoints[6][0]} ${bowPoints[6][1]}`;
+            d += ` Q ${bowPoints[7][0]} ${bowPoints[7][1]} ${bowPoints[0][0]} ${bowPoints[0][1]}`;
+            bowPath.setAttribute('d', d);
+
+            bowstring.setAttribute('y1', 20 + clamped * 10);
+            bowstring.setAttribute('y2', 20 + clamped * 10);
+            bowstring.setAttribute('x1', 40);
+            bowstring.setAttribute('x2', 240);
+            bowstring.style.transform = `translateY(${clamped * 20}px)`;
+
+            const color = `rgb(255, ${Math.floor(180 + 75 * (1 - clamped))}, ${Math.floor(50 + 150 * (1 - clamped))})`;
+            arrowShaft.setAttribute('stroke', color);
+            arrowTip.setAttribute('fill', color);
+        }
+
+        // --- Mouse drag ---
+        let isDragging = false;
+        let dragStartY = 0;
+        let dragCurrentY = 0;
+        let dragStartPull = 0;
+
+        arrowGroup.addEventListener('mousedown', (e) => {
+            if (isArrowFlying || isPopped || !bowContainer.classList.contains('show')) return;
+            e.preventDefault();
+            isDragging = true;
+            dragStartY = e.clientY;
+            const currentTransform = arrowGroup.getAttribute('transform') || 'translate(0,0)';
+            const match = currentTransform.match(/translate\(0,\s*(-?[\d.]+)\)/);
+            dragStartPull = match ? parseFloat(match[1]) / arrowMaxPull : 0;
+            arrowGroup.classList.add('dragging');
+            arrowGroup.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const deltaY = e.clientY - dragStartY;
+            const pullAmount = Math.min(Math.max(dragStartPull + deltaY / arrowMaxPull, 0), 1);
+            updateBowPull(pullAmount);
+            dragCurrentY = e.clientY;
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            arrowGroup.classList.remove('dragging');
+            arrowGroup.style.cursor = 'grab';
+
+            const pullAmount = Math.min(Math.max(dragStartPull + (dragCurrentY - dragStartY) / arrowMaxPull, 0), 1);
+            updateBowPull(0);
+            if (pullAmount > 0.15) flyArrowToBalloon();
+        });
+
+        // --- Touch drag ---
+        arrowGroup.addEventListener('touchstart', (e) => {
+            if (isArrowFlying || isPopped || !bowContainer.classList.contains('show')) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            isDragging = true;
+            dragStartY = touch.clientY;
+            const currentTransform = arrowGroup.getAttribute('transform') || 'translate(0,0)';
+            const match = currentTransform.match(/translate\(0,\s*(-?[\d.]+)\)/);
+            dragStartPull = match ? parseFloat(match[1]) / arrowMaxPull : 0;
+            arrowGroup.classList.add('dragging');
+        }, { passive: false });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const deltaY = touch.clientY - dragStartY;
+            const pullAmount = Math.min(Math.max(dragStartPull + deltaY / arrowMaxPull, 0), 1);
+            updateBowPull(pullAmount);
+            dragCurrentY = touch.clientY;
+        }, { passive: false });
+
+        document.addEventListener('touchend', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            arrowGroup.classList.remove('dragging');
+
+            const pullAmount = Math.min(Math.max(dragStartPull + (dragCurrentY - dragStartY) / arrowMaxPull, 0), 1);
+            updateBowPull(0);
+            if (pullAmount > 0.15) flyArrowToBalloon();
+        });
+
+        // ============================================================
+        //  KEYPAD LOGIC
+        // ============================================================
+        // Build 8 dots
+        for (let i = 0; i < 8; i++) {
+            const d = document.createElement('span');
+            d.className = 'dot';
+            dotsEl.appendChild(d);
+        }
+        const dotEls = dotsEl.querySelectorAll('.dot');
+
+        function renderDots() {
+            dotEls.forEach((d, i) => d.classList.toggle('filled', i < enteredCode.length));
+        }
+
+        function buzz(ms) {
+            if (navigator.vibrate) { try { navigator.vibrate(ms); } catch (e) {} }
+        }
+
+        function addDigit(d) {
+            if (isUnlocked || enteredCode.length >= 8) return;
+            enteredCode += d;
+            renderDots();
+            buzz(8);
+            if (enteredCode.length === 8) {
+                // ★ AUTO UNLOCK — any 8 digits
+                setTimeout(() => {
+                    if (ACCEPT_ANY_CODE || enteredCode === SECRET_CODE) {
+                        unlockExperience();
+                    }
+                }, 300);
+            }
+        }
+
+        function removeDigit() {
+            if (isUnlocked || !enteredCode.length) return;
+            enteredCode = enteredCode.slice(0, -1);
+            renderDots();
+            errorMsg.classList.remove('show');
+            buzz(6);
+        }
+
+        function clearCode() {
+            if (isUnlocked) return;
+            enteredCode = '';
+            renderDots();
+            errorMsg.classList.remove('show');
+            buzz(6);
+        }
+
+        keypad.addEventListener('click', (e) => {
+            const btn = e.target.closest('.key');
+            if (!btn) return;
+            const val = btn.dataset.val;
+            if (val === 'back') removeDigit();
+            else if (val === 'clear') clearCode();
+            else addDigit(val);
+        });
+
+        // ============================================================
+        //  PHYSICAL KEYBOARD SUPPORT
+        // ============================================================
+        document.addEventListener('keydown', (e) => {
+            if (isUnlocked) return;
+            if (/^\d$/.test(e.key)) {
+                e.preventDefault();
+                addDigit(e.key);
+            } else if (e.key === 'Backspace') {
+                e.preventDefault();
+                removeDigit();
+            } else if (e.key === 'Escape') {
+                clearCode();
+            }
+        });
+
+        // ============================================================
+        //  UNLOCK EXPERIENCE
+        // ============================================================
+        function unlockExperience() {
+            if (isUnlocked) return;
+            isUnlocked = true;
+
+            entryScreen.classList.add('fade-out');
+
+            sceneContainer.classList.add('active');
+            setTimeout(() => { balloonWrapper.classList.add('show'); }, 400);
+            setTimeout(() => {
+                bowContainer.classList.add('show');
+                updateBowPull(0);
+                arrowGroup.style.cursor = 'grab';
+            }, 700);
+
+            setTimeout(() => {
+                burstConfetti(30, window.innerWidth / 2, window.innerHeight / 2);
+            }, 300);
+        }
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        renderDots();
+
+        setTimeout(() => {
+            burstConfetti(20, window.innerWidth / 2, window.innerHeight / 2 - 100);
+        }, 600);
+
+        console.log('💕 Any 8 digits will unlock the surprise!');
+    </script>
+
+</body>
+</html>
